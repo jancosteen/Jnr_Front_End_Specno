@@ -8,13 +8,15 @@ import { CardComponent } from './components/card/card.component';
 import { GameBoardComponent } from './components/game-board/game-board.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {MatDialogModule} from '@angular/material/dialog';
+import { RestartDialogComponent } from './modals/restart-dialog-component/restart-dialog-component.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     CardComponent,
-    GameBoardComponent
+    GameBoardComponent,
+    RestartDialogComponent
 
   ],
   imports: [

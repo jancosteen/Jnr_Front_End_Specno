@@ -2,8 +2,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Player } from 'src/app/interfaces/player.interface';
+import { RestartDialogComponent } from 'src/app/modals/restart-dialog-component/restart-dialog-component.component';
 import { CardData } from './../../interfaces/cardData.interface';
-//import { RestartDialogComponent } from './restart-dialog/restart-dialog.component';
+
 
 @Component({
   selector: 'app-game-board',
@@ -193,7 +194,6 @@ export class GameBoardComponent implements OnInit {
         console.log('points', this.players[this.playerIndex].points);
         const cardOneIndex = this.cards.indexOf(cardOne);
         const cardTwoIndex = this.cards.indexOf(cardTwo);
-        console.log("index1", cardOneIndex, "index2", cardTwoIndex);
 
         var element1 = document.getElementById(cardOneIndex.toString());
         element1.style.opacity = "0";
@@ -201,15 +201,15 @@ export class GameBoardComponent implements OnInit {
         var element2 = document.getElementById(cardTwoIndex.toString());
         element2.style.opacity = "0";
 
-        // if (this.matchedCount === this.cardImages.length) {
-        //   const dialogRef = this.dialog.open(RestartDialogComponent, {
-        //     disableClose: true
-        //   });
+        //if (this.matchedCount === this.cardImages.length) {
+          const dialogRef = this.dialog.open(RestartDialogComponent, {
+            disableClose: true
+          });
 
-        //   dialogRef.afterClosed().subscribe(() => {
-        //     this.restart();
-        //   });
-        // }
+          dialogRef.afterClosed().subscribe(() => {
+            this.restart();
+          });
+        //}
       }
 
       this.nextPlayer();
@@ -225,3 +225,5 @@ export class GameBoardComponent implements OnInit {
 
 
 }
+
+
