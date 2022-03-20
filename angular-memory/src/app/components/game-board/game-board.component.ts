@@ -1,6 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Player } from 'src/app/interfaces/player.interface';
 import { CardData } from './../../interfaces/cardData.interface';
 //import { RestartDialogComponent } from './restart-dialog/restart-dialog.component';
 
@@ -21,6 +22,19 @@ export class GameBoardComponent implements OnInit {
 
   };
 
+  player1: Player = {
+    number: 1,
+    points: 0
+  }
+
+   player2: Player = {
+    number: 2,
+    points: 0
+  }
+
+  players: Player[] = [];
+  currentPlayer: number;
+  playerIndex: number;
 
 
   cardImages = [
@@ -96,7 +110,23 @@ export class GameBoardComponent implements OnInit {
 
   ngOnInit(): void {
     this.setupCards();
+    this.players.push(this.player1);
+    this.players.push(this.player2);
+    this.currentPlayer = 1;
   }
+
+  nextPlayer() {
+    if (this.currentPlayer === 1) {
+      this.currentPlayer = 2;
+      this.playerIndex = 1;
+    }
+    else {
+      this.currentPlayer = 1;
+      this.playerIndex = 0
+    }
+
+  }
+
 
   setupCards(): void {
     this.cards = [];
@@ -132,6 +162,7 @@ export class GameBoardComponent implements OnInit {
   }
 
   cardClicked(index: number): void {
+    this.playerIndex = this.currentPlayer - 1;
     const cardInfo = this.cards[index];
     if (cardInfo.state === 'default' && this.flippedCards.length < 2) {
       cardInfo.state = 'flipped';
@@ -144,7 +175,6 @@ export class GameBoardComponent implements OnInit {
     } else if (cardInfo.state === 'flipped') {
       cardInfo.state = 'default';
       this.flippedCards.pop();
-
     }
   }
 
@@ -158,7 +188,9 @@ export class GameBoardComponent implements OnInit {
       this.flippedCards = [];
 
       if (nextState === 'matched') {
-        this.matchedCount++;
+        this.players[this.playerIndex].points++;
+        console.log('currentPlayer',this.players[this.playerIndex]);
+        console.log('points', this.players[this.playerIndex].points);
         const cardOneIndex = this.cards.indexOf(cardOne);
         const cardTwoIndex = this.cards.indexOf(cardTwo);
         console.log("index1", cardOneIndex, "index2", cardTwoIndex);
@@ -179,6 +211,9 @@ export class GameBoardComponent implements OnInit {
         //   });
         // }
       }
+
+      this.nextPlayer();
+      console.log(this.currentPlayer);
 
     }, 1000);
   }
