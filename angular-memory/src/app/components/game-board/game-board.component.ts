@@ -13,6 +13,15 @@ export class GameBoardComponent implements OnInit {
 
   cards: CardData[] = [];
   cardColor: string;
+  blankCard: CardData = {
+    imageId: 'none',
+    state: 'removed',
+    number: '0',
+    color:"none"
+
+  };
+
+
 
   cardImages = [
     '2_of_clubs',
@@ -124,13 +133,12 @@ export class GameBoardComponent implements OnInit {
 
   cardClicked(index: number): void {
     const cardInfo = this.cards[index];
-
     if (cardInfo.state === 'default' && this.flippedCards.length < 2) {
       cardInfo.state = 'flipped';
       this.flippedCards.push(cardInfo);
 
       if (this.flippedCards.length > 1) {
-        this.checkForCardMatch();
+        this.checkForCardMatch(index);
       }
 
     } else if (cardInfo.state === 'flipped') {
@@ -140,15 +148,13 @@ export class GameBoardComponent implements OnInit {
     }
   }
 
-  checkForCardMatch(): void {
+  checkForCardMatch(index): void {
     setTimeout(() => {
       const cardOne = this.flippedCards[0];
       const cardTwo = this.flippedCards[1];
       const nextState = (cardOne.color === cardTwo.color && cardOne.number === cardTwo.number) ? 'matched' : 'default';
 
       cardOne.state = cardTwo.state = nextState;
-      console.log("cardOne",cardOne, 'cardTwo',cardTwo,'nextState', nextState,'cardOne.state', cardOne.state,'cardTwo.state', cardTwo.state)
-
       this.flippedCards = [];
 
       if (nextState === 'matched') {
@@ -156,9 +162,12 @@ export class GameBoardComponent implements OnInit {
         const cardOneIndex = this.cards.indexOf(cardOne);
         const cardTwoIndex = this.cards.indexOf(cardTwo);
         console.log("index1", cardOneIndex, "index2", cardTwoIndex);
-        this.cards.splice(cardOneIndex, 1);
-        this.cards.splice(cardTwoIndex, 1);
-        console.log(this.cards)
+
+        var element1 = document.getElementById(cardOneIndex.toString());
+        element1.style.opacity = "0";
+
+        var element2 = document.getElementById(cardTwoIndex.toString());
+        element2.style.opacity = "0";
 
         // if (this.matchedCount === this.cardImages.length) {
         //   const dialogRef = this.dialog.open(RestartDialogComponent, {

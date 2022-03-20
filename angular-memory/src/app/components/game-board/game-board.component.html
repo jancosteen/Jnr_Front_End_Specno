@@ -6,7 +6,7 @@
     remove
     those cards!</p>
   <div class="grid p-16">
-    <app-card *ngFor="let c of cards; let idx=index" [data]="c" (cardClicked)="cardClicked(idx)">
+    <app-card *ngFor="let c of cards; let idx=index" [data]="c" (cardClicked)="cardClicked(idx)" [id]="idx">
     </app-card>
   </div>
 </div>
