@@ -25,24 +25,14 @@ import { CardData } from 'src/app/interfaces/cardData.interface';
 })
 export class CardComponent implements OnInit {
 
-  data: CardData = {
-    imageId: "red_joker",
-    state: "default"
-  };
+  @Input() data: CardData;
 
-  //@Output() cardClicked = new EventEmitter();
+  @Output() cardClicked = new EventEmitter();
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  cardClicked() {
-    if (this.data.state === "default") {
-      this.data.state = "flipped";
-    } else {
-      this.data.state = "default";
-    }
-  }
 
 }
