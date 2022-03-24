@@ -1,0 +1,103 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: 0.6fr 1.7fr 0.6fr;
+  grid-template-rows: 0.5fr 2fr 0.5fr;
+  gap: 1px 2px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    ". . ."
+    ". . ."
+    ". . .";
+
+  padding: 10px;
+  height: 100%;
+  width: 100%;
+
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.item5{
+  background: linear-gradient(133.05deg, rgba(255, 255, 255, 0.6) 0.62%, rgba(255, 255, 255, 0.1) 102.4%);
+  border-radius: 8px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+h1{
+
+font-style: normal;
+font-weight: 700;
+font-size: 40.187px;
+line-height: 40px;
+
+/* or 100% */
+letter-spacing: 0.0882153px;
+
+color: #FFFFFF;
+}
+
+h2{
+  font-style: normal;
+font-weight: 700;
+font-size: 32px;
+line-height: 40px;
+
+/* or 100% */
+letter-spacing: 0.0882153px;
+
+bottom: 0px;
+
+color: #FFFFFF;
+}
+
+
+.item4{
+  display: grid;
+  grid-auto-flow: column;
+  gap: 4px;
+  align-items: center;
+  justify-items: center;
+}
+
+.item6{
+  display: grid;
+  grid-auto-flow: column;
+  gap: 4px;
+  align-items: center;
+  justify-items: center;
+  top: 0;
+}
+
+.item7{
+  display: grid;
+  grid-auto-flow: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.item9{
+  display: grid;
+  grid-auto-flow: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.playerBox{
+  background: linear-gradient(160.65deg, rgba(255, 255, 255, 0.6) 0.74%, rgba(255, 255, 255, 0.1) 102.03%);
+  border-radius: 8px;
+
+  width: 60%;
+  height: 70%;
+
+  display: grid;
+  grid-auto-flow: column;
+  gap: 4px;
+  align-items: center;
+  justify-items: center;
+}
+
+
+
