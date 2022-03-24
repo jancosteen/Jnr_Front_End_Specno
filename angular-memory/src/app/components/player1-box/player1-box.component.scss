@@ -1,0 +1,45 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: 0.5fr 1.9fr 0.5fr;
+  grid-template-rows: 2fr 0.5fr 0.5fr;
+  gap: 0px 2px;
+  grid-template-areas:
+    ". . ."
+    ". . ."
+    ". . .";
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
+h2{
+  font-style: normal;
+  font-weight: 500;
+  font-size: 28px;
+line-height: 40px;
+
+/* or 100% */
+letter-spacing: 0.0882153px;
+
+bottom: 0px;
+
+color: #FFFFFF;
+}
+
+h3{
+  font-style: normal;
+  font-weight: 300;
+  font-size: 22px;
+line-height: 40px;
+
+/* or 100% */
+letter-spacing: 0.0882153px;
+
+bottom: 0px;
+
+color: #FFFFFF;
+}

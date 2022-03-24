@@ -1,8 +1,13 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { Player } from 'src/app/interfaces/player.interface';
 import { RestartDialogComponent } from 'src/app/modals/restart-dialog-component/restart-dialog-component.component';
+import { changeState } from 'src/app/state/game-state/game-state.actions';
+import { increment1, increment2, reset } from 'src/app/state/score-counter/score-counter.actions';
+
 import { CardData } from './../../interfaces/cardData.interface';
 
 
@@ -12,6 +17,11 @@ import { CardData } from './../../interfaces/cardData.interface';
   styleUrls: ['./game-board.component.scss']
 })
 export class GameBoardComponent implements OnInit {
+  @Input() cPlayer: number;
+  @Output() cPlayerChanged: EventEmitter<number> = new EventEmitter();
+
+  @Input() gState: string;
+  @Output() gameStateChanged: EventEmitter<string> = new EventEmitter();
 
   cards: CardData[] = [];
   cardColor: string;
@@ -22,6 +32,9 @@ export class GameBoardComponent implements OnInit {
     color:"none"
 
   };
+
+  winningPlayer: string = '';
+  losingPlayer: string = '';
 
   player1: Player = {
     number: 1,
@@ -37,6 +50,8 @@ export class GameBoardComponent implements OnInit {
   currentPlayer: number;
   playerIndex: number;
 
+  counter1: number;
+  counter2: number;
 
   cardImages = [
     '2_of_clubs',
@@ -99,13 +114,20 @@ export class GameBoardComponent implements OnInit {
 
   matchedCount = 0;
 
+  displayStyle = "none";
+
   shuffleArray(anArray: any[]): any[] {
     return anArray.map(a => [Math.random(), a])
       .sort((a, b) => a[0] - b[0])
       .map(a => a[1]);
   }
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog,
+    private store1: Store<{ counter1: { counter1: number } }>,
+    private store2: Store<{ counter2: { counter2: number } }>,
+    private router: Router,
+    private gameStateStore: Store<{ currentState: { currentState: string } }>
+  ) {
 
   }
 
@@ -120,12 +142,13 @@ export class GameBoardComponent implements OnInit {
     if (this.currentPlayer === 1) {
       this.currentPlayer = 2;
       this.playerIndex = 1;
+      this.cPlayerChanged.emit(this.currentPlayer)
     }
     else {
       this.currentPlayer = 1;
-      this.playerIndex = 0
+      this.playerIndex = 0;
+      this.cPlayerChanged.emit(this.currentPlayer);
     }
-
   }
 
 
@@ -159,7 +182,7 @@ export class GameBoardComponent implements OnInit {
     });
 
     this.cards = this.shuffleArray(this.cards);
-    console.log(this.cards);
+
   }
 
   cardClicked(index: number): void {
@@ -189,9 +212,10 @@ export class GameBoardComponent implements OnInit {
       this.flippedCards = [];
 
       if (nextState === 'matched') {
-        this.players[this.playerIndex].points++;
-        console.log('currentPlayer',this.players[this.playerIndex]);
-        console.log('points', this.players[this.playerIndex].points);
+        if (this.players[this.playerIndex].number === 1)
+          this.store1.dispatch(increment1());
+        else
+          this.store2.dispatch(increment2());
         const cardOneIndex = this.cards.indexOf(cardOne);
         const cardTwoIndex = this.cards.indexOf(cardTwo);
 
@@ -201,27 +225,83 @@ export class GameBoardComponent implements OnInit {
         var element2 = document.getElementById(cardTwoIndex.toString());
         element2.style.opacity = "0";
 
-        //if (this.matchedCount === this.cardImages.length) {
+        this.openPopup();
+
+        if (this.matchedCount === this.cardImages.length) {
           const dialogRef = this.dialog.open(RestartDialogComponent, {
             disableClose: true
           });
 
           dialogRef.afterClosed().subscribe(() => {
-            this.restart();
+            this.restartClicked();
           });
-        //}
+        }
+      }
+      this.store1.select('counter1').subscribe(data => {
+        this.counter1 = data.counter1;
+      });
+
+      this.store2.select('counter2').subscribe(data => {
+        this.counter2 = data.counter2;
+      });
+
+    this.checkMatchedCount(this.counter1, this.counter2);
+      this.nextPlayer();
+    }, 1000)
+
+
+  }
+
+  restartClicked(): void {
+    this.store1.dispatch(reset());
+    this.setupCards();
+    for (let x = 0; x < this.cards.length; x++){
+      var element1 = document.getElementById(x.toString());
+      element1.style.opacity = "1";
+      this.cards[x].state = 'default';
+    }
+
+    location.reload();
+  }
+
+  checkMatchedCount(count1: number, count2: number) {
+    if ((count1 + count2) == 1) {
+      this.gameStateStore.dispatch(changeState())
+      if (count1 > count2) {
+        this.winningPlayer = sessionStorage.getItem("player1");
+        this.losingPlayer = sessionStorage.getItem("player2");
+
+        sessionStorage.setItem("winCount", count1.toString());
+        sessionStorage.setItem("loseCount", count2.toString());
+        sessionStorage.setItem("winningPlayer", this.winningPlayer);
+        sessionStorage.setItem("losingPlayer", this.losingPlayer);
+      }
+      else {
+        this.winningPlayer = sessionStorage.getItem("player2")
+        this.losingPlayer = sessionStorage.getItem("player1");
+
+        sessionStorage.setItem("winCount", count2.toString());
+        sessionStorage.setItem("loseCount", count1.toString());
+        sessionStorage.setItem("winningPlayer", this.winningPlayer);
+        sessionStorage.setItem("losingPlayer", this.losingPlayer);
       }
 
-      this.nextPlayer();
-      console.log(this.currentPlayer);
+      this.router.navigate(['/result']);
+    }
 
-    }, 1000);
+
+
+
   }
 
-  restart(): void {
-    this.matchedCount = 0;
-    this.setupCards();
+  openPopup() {
+    this.displayStyle = "block";
   }
+  closePopup() {
+    this.displayStyle = "none";
+  }
+
+
 
 
 }

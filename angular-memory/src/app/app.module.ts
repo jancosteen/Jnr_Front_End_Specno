@@ -9,6 +9,18 @@ import { GameBoardComponent } from './components/game-board/game-board.component
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {MatDialogModule} from '@angular/material/dialog';
 import { RestartDialogComponent } from './modals/restart-dialog-component/restart-dialog-component.component';
+import { StoreModule } from '@ngrx/store';
+import { scoreCounter1Reducer } from './state/score-counter/score-counter1.reducer';
+import { scoreCounter2Reducer } from './state/score-counter/score-counter2.reducer';
+import { Player1BoxComponent } from './components/player1-box/player1-box.component';
+import { Player2BoxComponent } from './components/player2-box/player2-box.component';
+import { GameComponent } from './components/game/game.component';
+import { StartPageComponent } from './components/start-page/start-page.component';
+import { FormsModule } from '@angular/forms';
+import { gameStateReducer } from './state/game-state/game-state.reducer';
+import { ResultsComponent } from './components/results/results.component';
+
+
 
 
 @NgModule({
@@ -16,7 +28,14 @@ import { RestartDialogComponent } from './modals/restart-dialog-component/restar
     AppComponent,
     CardComponent,
     GameBoardComponent,
-    RestartDialogComponent
+    RestartDialogComponent,
+    Player1BoxComponent,
+    Player2BoxComponent,
+    GameComponent,
+    StartPageComponent,
+    ResultsComponent,
+
+
 
   ],
   imports: [
@@ -24,7 +43,14 @@ import { RestartDialogComponent } from './modals/restart-dialog-component/restar
     AppRoutingModule,
     BrowserAnimationsModule,
     MatToolbarModule,
-    MatDialogModule
+    MatDialogModule,
+    StoreModule.forRoot({
+      counter1: scoreCounter1Reducer,
+      counter2: scoreCounter2Reducer,
+      currentState: gameStateReducer
+
+    }),
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

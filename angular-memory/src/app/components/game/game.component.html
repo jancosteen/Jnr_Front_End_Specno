@@ -1,0 +1,32 @@
+<div class="grid-container">
+  <div class="item1"></div>
+  <div class="item2 text-center">
+    <h1>Memory</h1>
+  </div>
+  <div class="item3">
+    <button type="button" class="btn btn-warning btn-md float-right mx-3" (click)="restart()" >Restart Game</button>
+    <button type="button" class="btn btn-danger btn-md float-right mx-3" (click)="exitClicked()">Exit Game</button>
+  </div>
+  <div class="item4 text-center">
+    <div class="playerBox">
+      <app-player1-box></app-player1-box>
+    </div>
+  </div>
+  <div class="item5 ">
+    <app-game-board #gameBoard [cPlayer]="currentPlayer" (cPlayerChanged)="playerChangedHandler($event)"></app-game-board>
+  </div>
+  <div class="item6 text-center">
+    <div class="playerBox">
+      <app-player2-box></app-player2-box>
+    </div>
+  </div>
+  <div class="item7">
+    <button *ngIf="currentPlayer == 1" type="button" class="btn btn-success btn-md float-right mx-3">It's Your Turn!</button>
+  </div>
+  <div class="item8"></div>
+  <div class="item9">
+    <button *ngIf="currentPlayer == 2" type="button" class="btn btn-success btn-md float-right mx-3">It's Your Turn!</button>
+  </div>
+</div>
+
+
